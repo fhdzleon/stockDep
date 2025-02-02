@@ -6,10 +6,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProductListModal from "./ProductListModal";
 import { ProductModal } from "./ProductListModal";
 
+type ActionResponse =
+  | { total: number; products: ProductModal[] }
+  | ProductModal[];
+
 interface WidgetCardProps {
   title: string;
   bg: string;
-  action: () => Promise<ProductModal[]>;
+  action: () => Promise<ActionResponse>;
 }
 
 const WidgetCard: React.FC<WidgetCardProps> = ({ title, bg, action }) => {
@@ -21,7 +25,7 @@ const WidgetCard: React.FC<WidgetCardProps> = ({ title, bg, action }) => {
     const fetchData = async () => {
       try {
         const result = await action();
-        setResponse(result.length);
+        setResponse("total" in result ? result.total : "Error");
       } catch (error) {
         setResponse("Error");
       }
@@ -34,7 +38,7 @@ const WidgetCard: React.FC<WidgetCardProps> = ({ title, bg, action }) => {
     setShowModal(true);
     try {
       const result = await action();
-      setProducts(result);
+      setProducts("products" in result ? result.products : result);
     } catch (error) {
       setProducts([]);
     }
@@ -43,7 +47,6 @@ const WidgetCard: React.FC<WidgetCardProps> = ({ title, bg, action }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
   return (
     <div className="px-3 py-2 space-y-4 mx-2 mt-14 flex flex-col border-[1px] w-1/5 border-primary rounded-lg">
       <p className="text-base text-center font-bold">{title}</p>

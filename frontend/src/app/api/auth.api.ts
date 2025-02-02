@@ -110,3 +110,4 @@ export const handleLogout = async (): Promise<ApiResponse> => {
     };
   }
 };
+

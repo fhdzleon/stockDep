@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import AlertMiddleware from "@/components/auth/alertMiddleware";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -31,6 +32,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         </Link>
         {children}
       </div>
+      <AlertMiddleware />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 import React from "react";
 import WidgetCard from "../../../ui/dashboard/WidgetCard";
 import {

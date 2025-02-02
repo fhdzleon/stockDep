@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { useProducts } from "@/hooks/useProduct";
 import { ProductsResponse } from "@/types/product.types";
 import { useCategories } from "@/hooks/useCategories";
+import { useCategoriesStore } from "@/store/product.store";
 
 interface EditProps {
   product: ProductsResponse;
@@ -39,7 +40,7 @@ function ProductEdit({ product, closeModal }: EditProps) {
     resolver: zodResolver(OptionalProductSchema),
   });
 
-  const { categoriesData } = useCategories();
+  const { data } = useCategoriesStore();
   const { data: userData } = useUserStore();
 
   const { updateProduct, isUpdating, updateError } = useProducts();
@@ -107,14 +108,13 @@ function ProductEdit({ product, closeModal }: EditProps) {
                 <select
                   {...register("categoryId")}
                   defaultValue={0}
-                  className={`select select-bordered ${
-                    errors.categoryId ? "select-error" : "select-primary"
-                  }`}
+                  className={`select select-bordered ${errors.categoryId ? "select-error" : "select-primary"
+                    }`}
                 >
                   <option value={0} disabled>
                     Categoria
                   </option>
-                  {categoriesData?.map((categoria, index) => (
+                  {data?.map((categoria, index) => (
                     <option value={categoria.id} key={index}>
                       {categoria.name}
                     </option>

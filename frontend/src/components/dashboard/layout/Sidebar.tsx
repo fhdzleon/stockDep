@@ -35,7 +35,7 @@ const Sidebar = () => {
       <div className="mb-8">
         <Image
           priority={true}
-          className="max-w-40 w-auto "
+          className="max-w-40 mx-auto w-auto "
           src="/logoWhite.png"
           alt="logo"
           width={900}
