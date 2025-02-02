@@ -50,7 +50,7 @@ export const validateProductUpdate = [
     .isFloat({ gt: 0 })
     .withMessage('El precio de costo debe ser un numero positivo'),
   body('expirationDate')
-    .optional({ nullable: true })
+    .optional({ checkFalsy: true })
     .isDate()
     .withMessage('El vencimiento debe ser una valor de fecha válido'),
   body('minimumQuantity')

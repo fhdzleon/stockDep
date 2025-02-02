@@ -11,10 +11,11 @@ import {
   postProduct,
 } from "@/app/api/product.api";
 import { QueriesResponse } from "@/types/product.types";
+import { useUserStore } from "@/store/user.store";
 
 export function useProducts() {
   const queryClient = useQueryClient();
-
+  const { data } = useUserStore()
   const {
     data: productsQuery,
     fetchNextPage,
@@ -24,7 +25,7 @@ export function useProducts() {
     error,
     isFetching,
   } = useInfiniteQuery<QueriesResponse>({
-    queryKey: ["infinityProducts"],
+    queryKey: ["infinityProducts", data?.id],
     queryFn: ({ pageParam = 1 }) => getAllProducts(Number(pageParam)),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
@@ -37,21 +38,21 @@ export function useProducts() {
   const addProductQuery = useMutation({
     mutationFn: postProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
     },
   });
 
   const updateProductQuery = useMutation({
     mutationFn: putProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
     },
   });
 
   const deleteProductQuery = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
     },
   });
 
