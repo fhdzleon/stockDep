@@ -34,9 +34,16 @@ export async function middleware(req: NextRequest) {
     }
 
     return NextResponse.next();
-  } catch (error) {
+  } catch (error: unknown) {
+    let errorMessage = "invalid";
+
+    if (error instanceof Error) {
+      console.error("Middleware error:", error.message);
+      errorMessage = "invalid_token";
+    }
+
     return NextResponse.redirect(
-      new URL("/auth/signin?error=invalid", req.url)
+      new URL(`/auth/signin?error=${errorMessage}`, req.url)
     );
   }
 }

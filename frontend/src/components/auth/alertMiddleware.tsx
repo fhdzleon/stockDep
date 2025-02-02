@@ -9,10 +9,10 @@ function AlertMiddleware() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [_, setErrorMessage] = useState<string | null>(null);
-  const { setData } = useCategoriesStore()
-  const { delData } = useUserStore()
-  const { cleanFilter } = useFilterProduct()
+  const [, setErrorMessage] = useState<string | null>(null);
+  const { setData } = useCategoriesStore();
+  const { delData } = useUserStore();
+  const { cleanFilter } = useFilterProduct();
   useEffect(() => {
     const errorParam = searchParams.get("error");
     if (errorParam) {
@@ -26,13 +26,13 @@ function AlertMiddleware() {
       const error = errorMap[errorParam] || "Ocurrió un error desconocido.";
       setErrorMessage(error);
 
-      setData([])
-      delData()
-      cleanFilter()
+      setData([]);
+      delData();
+      cleanFilter();
 
-      localStorage.removeItem('categories-store')
-      localStorage.removeItem('filter-product')
-      localStorage.removeItem('user-store')
+      localStorage.removeItem("categories-store");
+      localStorage.removeItem("filter-product");
+      localStorage.removeItem("user-store");
 
       Swal.fire({
         icon: "error",
