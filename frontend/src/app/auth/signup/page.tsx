@@ -1,3 +1,5 @@
+"use client";
+
 import { Suspense } from "react";
 import RegisterForm from "@/components/auth/RegisterForm";
 import AlertMiddleware from "@/components/auth/alertMiddleware";
