@@ -9,7 +9,7 @@ import { useUserStore } from "@/store/user.store";
 import Swal from "sweetalert2";
 import { useProducts } from "@/hooks/useProduct";
 import { ProductsResponse } from "@/types/product.types";
-import { useCategories } from "@/hooks/useCategories";
+/* import { useCategories } from "@/hooks/useCategories"; */
 import { useCategoriesStore } from "@/store/product.store";
 
 interface EditProps {
@@ -108,8 +108,9 @@ function ProductEdit({ product, closeModal }: EditProps) {
                 <select
                   {...register("categoryId")}
                   defaultValue={0}
-                  className={`select select-bordered ${errors.categoryId ? "select-error" : "select-primary"
-                    }`}
+                  className={`select select-bordered ${
+                    errors.categoryId ? "select-error" : "select-primary"
+                  }`}
                 >
                   <option value={0} disabled>
                     Categoria
