@@ -10,26 +10,39 @@ export async function middleware(req: NextRequest) {
   }
 
   const jwt = req.cookies.get("authToken");
-  if (!jwt) return NextResponse.redirect(new URL("/auth/signin?error=unauthenticated", req.url));
+  if (!jwt)
+    return NextResponse.redirect(
+      new URL("/auth/signin?error=unauthenticated", req.url)
+    );
 
   try {
-    const { payload } = await jwtVerify(jwt.value, new TextEncoder().encode(SECRET));
+    const { payload } = await jwtVerify(
+      jwt.value,
+      new TextEncoder().encode(SECRET)
+    );
 
     if (!payload || !payload.exp) {
-      return NextResponse.redirect(new URL("/auth/signin?error=invalid", req.url));
+      return NextResponse.redirect(
+        new URL("/auth/signin?error=invalid", req.url)
+      );
     }
 
     if (Date.now() >= payload.exp * 1000) {
-      return NextResponse.redirect(new URL("/auth/signin?error=expired", req.url));
+      return NextResponse.redirect(
+        new URL("/auth/signin?error=expired", req.url)
+      );
     }
 
     return NextResponse.next();
   } catch (error) {
-    return NextResponse.redirect(new URL("/auth/signin?error=invalid", req.url));
+    return NextResponse.redirect(
+      new URL("/auth/signin?error=invalid", req.url)
+    );
   }
 }
 
-
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: [
+    /* "/dashboard/:path*" */
+  ],
 };
