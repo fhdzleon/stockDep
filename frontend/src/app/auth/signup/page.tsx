@@ -1,10 +1,15 @@
+import { Suspense } from "react";
 import RegisterForm from "@/components/auth/RegisterForm";
+import AlertMiddleware from "@/components/auth/alertMiddleware";
 
 function SignupPage() {
   return (
-    <div>
-      <RegisterForm />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>
+        <AlertMiddleware />
+        <RegisterForm />
+      </div>
+    </Suspense>
   );
 }
 
