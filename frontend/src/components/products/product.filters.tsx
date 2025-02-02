@@ -32,7 +32,7 @@ function ProductFilter() {
 
   useEffect(() => {
     setFilter(debouncedInputValue);
-  }, [debouncedInputValue]);
+  }, [debouncedInputValue, setFilter]);
 
   return (
     <div className="flex flex-col gap-5 my-5">
