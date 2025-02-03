@@ -28,7 +28,18 @@ export interface ErrorResponse {
 
 export const handleLogin = async (
   dataLogin: LoginProps
-): Promise<ApiResponse<{ user: User; token: string }>> => {
+): Promise<
+  ApiResponse<{
+    id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    nameCompany: string;
+    businessArea: string;
+    user: User;
+    token: string;
+  }>
+> => {
   try {
     const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
       withCredentials: true,
@@ -39,7 +50,13 @@ export const handleLogin = async (
       message: data.message,
       data: {
         user: data.user,
-        token: data.token, // 🔹 Enviar el token al cliente
+        token: data.token,
+        id: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        nameCompany: "",
+        businessArea: "",
       },
     };
   } catch (error) {
