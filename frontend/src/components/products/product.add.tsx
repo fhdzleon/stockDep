@@ -24,15 +24,17 @@ function ProductAdd({ close }: Props) {
   });
 
   const { data: userData } = useUserStore();
-  const { createProduct, isCreating, error } = useProducts();
+  const { createProduct, isCreating, createError } = useProducts();
   const { categoriesData } = useCategories();
 
-  const handleSave: SubmitHandler<ProductSchema> = (data) => {
-    createProduct({ ...data, userId: userData?.id });
-    if (!error) {
+  const handleSave: SubmitHandler<ProductSchema> = async (data) => {
+    try {
+      await createProduct({ ...data, userId: userData?.id });
+
       close();
       reset();
-      return Swal.fire({
+
+      Swal.fire({
         icon: "success",
         title: "Producto agregado",
         html: "<small>Producto agregado</small>",
@@ -41,13 +43,18 @@ function ProductAdd({ close }: Props) {
         toast: true,
         position: "bottom-end",
         timerProgressBar: true,
+        confirmButtonColor: "var(--primary)",
+      });
+    } catch (error: unknown) {
+      const errMessage = error instanceof Error ? error.message : "";
+
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: createError?.message || errMessage || "Error al crear el producto",
+        confirmButtonColor: "var(--primary)",
       });
     }
-    return Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: error.message,
-    });
   };
 
   return (
@@ -78,9 +85,8 @@ function ProductAdd({ close }: Props) {
           <select
             {...register("categoryId")}
             defaultValue={0}
-            className={`select select-bordered ${
-              errors.categoryId ? "select-error" : "select-primary"
-            }`}
+            className={`select select-bordered ${errors.categoryId ? "select-error" : "select-primary"
+              }`}
           >
             <option value={0} disabled>
               Categoria

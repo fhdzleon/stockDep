@@ -29,8 +29,8 @@ const ProductItem: FC<ProductoProps> = ({
     return data.quantity === 0
       ? "nulo"
       : data.quantity <= data.minimumQuantity
-      ? "bajo"
-      : "disponible";
+        ? "bajo"
+        : "disponible";
   };
 
   const stockClass = clsx("font-semibold rounded text-xs w-full h-fit p-1", {
@@ -60,7 +60,7 @@ const ProductItem: FC<ProductoProps> = ({
       <div ref={containerRef} onClick={handleOptions} className={statusClass}>
         <span
           title={data.name}
-          className="col-span-2 text-start max-w-40 w-full line-clamp-2"
+          className="col-span-2 text-start max-w-40 w-full truncate whitespace-nowrap line-clamp-2"
         >
           {data.name}
         </span>

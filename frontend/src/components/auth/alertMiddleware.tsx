@@ -46,7 +46,7 @@ function AlertMiddleware() {
         router.replace(`${pathname}?${newParams.toString()}`);
       });
     }
-  }, [searchParams, pathname, router]);
+  }, [searchParams, pathname, router, cleanFilter, delData, setData]);
 
   return null;
 }
