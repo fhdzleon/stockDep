@@ -3,7 +3,11 @@ import { getDatabaseConfig } from "./config";
 import { cookies } from "next/headers";
 
 export const getAuthToken = () => {
-  return cookies().get("authToken")?.value;
+  const tokenFromCookies = cookies().get("authToken")?.value;
+  const tokenFromLocalStorage =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
+  return tokenFromCookies || tokenFromLocalStorage;
 };
 
 const { API_URL } = getDatabaseConfig;
@@ -13,6 +17,7 @@ export const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 API.interceptors.request.use(

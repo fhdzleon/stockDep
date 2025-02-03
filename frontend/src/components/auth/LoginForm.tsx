@@ -49,6 +49,8 @@ const LoginForm = () => {
       });
     }
 
+    localStorage.setItem("authToken", response.data.token);
+
     const userData: BasicUserInfo = {
       id: response.data.id,
       firstname: response.data.firstname,
