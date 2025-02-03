@@ -34,9 +34,9 @@ export const handleLogin = async (
     });
     const cookieOptions = {
       path: "/",
-      domain: ".vercel.app",
+      domain: process.env.VERCEL_URL ? `.${process.env.VERCEL_URL}` : undefined,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none" as const,
       maxAge: 60 * 60 * 24,
     };
