@@ -2,7 +2,10 @@ import axios from "axios";
 import { getDatabaseConfig } from "./config";
 
 export const getAuthToken = () => {
-  return localStorage.getItem("authToken");
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("authToken");
+  }
+  return null;
 };
 
 const { API_URL } = getDatabaseConfig;
