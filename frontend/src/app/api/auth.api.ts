@@ -32,6 +32,16 @@ export const handleLogin = async (
     const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
       withCredentials: true,
     });
+    const cookieOptions = {
+      path: "/",
+      domain: process.env.VERCEL_URL ? `.${process.env.VERCEL_URL}` : undefined,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none" as const,
+      maxAge: 60 * 60 * 24,
+    };
+    const token = data.token;
+    cookies().set("authToken", token, cookieOptions);
 
     return {
       wasValid: true,
