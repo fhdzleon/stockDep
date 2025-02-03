@@ -29,12 +29,14 @@ export const handleLogin = async (
   dataLogin: LoginProps
 ): Promise<ApiResponse<User>> => {
   try {
-    const { data } = await API.post<LoginResponse>("/users/login", dataLogin);
+    const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
+      withCredentials: true,
+    });
     const cookieOptions = {
       path: "/",
-      domain: "localhost",
+      domain: ".vercel.app",
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24,
     };
     const token = data.token;
@@ -110,4 +112,3 @@ export const handleLogout = async (): Promise<ApiResponse> => {
     };
   }
 };
-
