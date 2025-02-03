@@ -45,7 +45,7 @@ export const handleLogin = async (
     };
 
     const token = data.token;
-    localStorage.setItem("authToken", token);
+
     cookies().set("authToken", token, cookieOptions);
 
     return {
