@@ -1,5 +1,6 @@
 "use server";
 import { cookies } from "next/headers";
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { API } from ".";
 import { useUserStore } from "@/store/user.store";
 import { ApiResponse, LoginProps, RegisterProps } from "./config";
@@ -32,14 +33,17 @@ export const handleLogin = async (
     const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
       withCredentials: true,
     });
-    const cookieOptions = {
+
+    const cookieOptions: Partial<ResponseCookie> = {
       path: "/",
-      domain: process.env.VERCEL_URL ? `.${process.env.VERCEL_URL}` : undefined,
+      // Usa el dominio base sin subdominios
+      domain: process.env.NODE_ENV === "production" ? "vercel.app" : undefined,
       httpOnly: true,
-      secure: true,
-      sameSite: "none" as const,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 60 * 60 * 24,
     };
+
     const token = data.token;
     cookies().set("authToken", token, cookieOptions);
 
