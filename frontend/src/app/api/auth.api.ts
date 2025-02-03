@@ -37,6 +37,7 @@ export const handleLogin = async (
       domain: ".vercel.app",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "none" as const,
       maxAge: 60 * 60 * 24,
     };
     const token = data.token;
