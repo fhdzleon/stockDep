@@ -51,12 +51,12 @@ export const handleLogin = async (
       data: {
         user: data.user,
         token: data.token,
-        id: "",
-        firstname: "",
-        lastname: "",
-        email: "",
-        nameCompany: "",
-        businessArea: "",
+        id: data.user.id,
+        firstname: data.user.firstname,
+        lastname: data.user.lastname,
+        email: data.user.email,
+        nameCompany: data.user.nameCompany,
+        businessArea: data.user.businessArea,
       },
     };
   } catch (error) {
