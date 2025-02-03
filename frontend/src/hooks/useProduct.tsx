@@ -15,7 +15,9 @@ import { useUserStore } from "@/store/user.store";
 
 export function useProducts() {
   const queryClient = useQueryClient();
-  const { data } = useUserStore()
+  const { data } = useUserStore();
+
+
   const {
     data: productsQuery,
     fetchNextPage,
@@ -38,21 +40,30 @@ export function useProducts() {
   const addProductQuery = useMutation({
     mutationFn: postProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["infinityProducts", data?.id],
+        refetchType: "active"
+      });
     },
   });
 
   const updateProductQuery = useMutation({
     mutationFn: putProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["infinityProducts", data?.id],
+        refetchType: "active"
+      });
     },
   });
 
   const deleteProductQuery = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["infinityProducts", data?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["infinityProducts", data?.id],
+        refetchType: "active"
+      });
     },
   });
 
@@ -65,16 +76,17 @@ export function useProducts() {
     hasPreviousPage,
     isFetching,
 
-    createProduct: addProductQuery.mutate,
-    updateProduct: updateProductQuery.mutate,
-    deleteProduct: deleteProductQuery.mutate,
+    createProduct: addProductQuery.mutateAsync,
+    updateProduct: updateProductQuery.mutateAsync,
+    deleteProduct: deleteProductQuery.mutateAsync,
+
 
     isCreating: addProductQuery.isPending,
     isUpdating: updateProductQuery.isPending,
     isDeleting: deleteProductQuery.isPending,
 
-    updateError: updateProductQuery.data,
-    deleteError: deleteProductQuery.data,
-    createError: addProductQuery.data,
+    createError: addProductQuery.error,
+    updateError: updateProductQuery.error,
+    deleteError: deleteProductQuery.error,
   };
 }

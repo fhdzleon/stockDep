@@ -9,7 +9,7 @@ function AlertMiddleware() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [_, setErrorMessage] = useState<string | null>(null);
+  const [, setErrorMessage] = useState<string | null>(null);
   const { setData } = useCategoriesStore()
   const { delData } = useUserStore()
   const { cleanFilter } = useFilterProduct()
@@ -46,7 +46,7 @@ function AlertMiddleware() {
         router.replace(`${pathname}?${newParams.toString()}`);
       });
     }
-  }, [searchParams, pathname, router]);
+  }, [searchParams, pathname, router, cleanFilter, delData, setData]);
 
   return null;
 }

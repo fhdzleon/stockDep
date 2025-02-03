@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,7 +32,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         </Link>
         {children}
       </div>
-      <AlertMiddleware />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AlertMiddleware />
+      </Suspense>
     </div>
   );
 }

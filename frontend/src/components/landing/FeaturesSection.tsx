@@ -1,4 +1,4 @@
-import React from "react";
+import Image from "next/image";
 import feat1 from "../../../public/assets/landing/feat-1.svg";
 import feat2 from "../../../public/assets/landing/feat-2.svg";
 import feat3 from "../../../public/assets/landing/feat-3.svg";
@@ -14,7 +14,9 @@ function FeaturesSection() {
       <div className="flex flex-col items-center justify-center w-full md:flex-row p-0 sm:p-20">
         <div className="flex flex-col items-start justify-center w-full md:w-1/2  p-4 sm:pb-32 gap-10">
           <div className="flex flex-row items-center justify-center w-full">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={feat1.src}
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
@@ -49,7 +51,9 @@ function FeaturesSection() {
                 </li>
               </ul>
             </div>
-            <img
+            <Image
+              width={900}
+              height={900}
               src={feat2.src}
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
@@ -59,7 +63,9 @@ function FeaturesSection() {
 
         <div className="flex flex-col items-start justify-center w-full md:w-1/2  p-4 sm:pt-32 gap-10">
           <div className="flex flex-row items-center justify-center w-full">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={feat3.src}
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
@@ -93,7 +99,9 @@ function FeaturesSection() {
                 </li>
               </ul>
             </div>
-            <img
+            <Image
+              width={900}
+              height={900}
               src={feat4.src}
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"

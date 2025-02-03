@@ -1,4 +1,4 @@
-import React from "react";
+import Image from "next/image";
 import heroImg from "../../../public/assets/landing/hero-img.jpg";
 
 function HeroSection() {
@@ -7,7 +7,9 @@ function HeroSection() {
       id="hero"
       className="flex scroll-mt-40 flex-col md:flex-row justify-between items-center"
     >
-      <img
+      <Image
+        width={900}
+        height={900}
         src={heroImg.src}
         alt="Imagen encabezado"
         className="object-cover w-full md:w-1/2 h-100"

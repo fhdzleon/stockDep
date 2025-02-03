@@ -9,7 +9,6 @@ import { useUserStore } from "@/store/user.store";
 import Swal from "sweetalert2";
 import { useProducts } from "@/hooks/useProduct";
 import { ProductsResponse } from "@/types/product.types";
-import { useCategories } from "@/hooks/useCategories";
 import { useCategoriesStore } from "@/store/product.store";
 
 interface EditProps {
@@ -24,7 +23,6 @@ function ProductEdit({ product, closeModal }: EditProps) {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
   } = useForm<OptionalProductSchema>({
     defaultValues: {
       name: product.name,
@@ -51,23 +49,27 @@ function ProductEdit({ product, closeModal }: EditProps) {
       ...data,
       userId: userData?.id ?? "",
     };
-    updateProduct(fulldata);
-    if (updateError) {
+    try {
+      await updateProduct(fulldata);
       toggleVisible();
-      reset();
-      return Swal.fire({
+      closeModal();
+
+      Swal.fire({
+        icon: "success",
+        title: "Producto editado",
+        text: "Producto editado correctamente",
+        confirmButtonColor: "var(--primary)",
+      });
+    } catch (error) {
+      const errMessage = error instanceof Error ? error.message : "";
+      Swal.fire({
         icon: "error",
-        title: "Fallo edicion de producto",
-        text: updateError.error,
+        title: "Oops...",
+        text: updateError?.message || errMessage || "Error al crear el producto",
+        confirmButtonColor: "var(--primary)",
       });
     }
-    toggleVisible();
-    closeModal();
-    return Swal.fire({
-      icon: "success",
-      title: "Producto editado",
-      text: "Producto editado correctamente",
-    });
+
   };
 
   return (

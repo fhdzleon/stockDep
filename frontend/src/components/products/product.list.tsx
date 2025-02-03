@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useProducts } from "@/hooks/useProduct";
 import ProductItem from "./product.item";
-import ProductItemSkeleton from "./product.item.skeleton";
+import { ProductItemSkeleton } from "./product.item.skeleton";
 import { motion, Variants } from "framer-motion";
 
 const listVariant: Variants = {

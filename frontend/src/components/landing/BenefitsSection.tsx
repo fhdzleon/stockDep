@@ -1,8 +1,10 @@
-import React from "react";
+import Image from "next/image";
 import benefitsImg from "../../../public/assets/landing/benefits-img.jpg";
 import checkListPng from "../../../public/assets/landing/check-list.png";
 
 function BenefitsSection() {
+
+
   return (
     <section
       id="benefits"
@@ -20,7 +22,9 @@ function BenefitsSection() {
 
         <ul className="list-none">
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -31,7 +35,9 @@ function BenefitsSection() {
             </span>
           </li>
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -42,7 +48,9 @@ function BenefitsSection() {
             </span>
           </li>
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -53,7 +61,9 @@ function BenefitsSection() {
             </span>
           </li>
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -63,7 +73,9 @@ function BenefitsSection() {
             </span>
           </li>
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -74,7 +86,9 @@ function BenefitsSection() {
             </span>
           </li>
           <li className="flex items-start mb-2">
-            <img
+            <Image
+              width={900}
+              height={900}
               src={checkListPng.src}
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
@@ -88,7 +102,9 @@ function BenefitsSection() {
       </div>
 
       <div className="w-full h-auto relative md:w-[500px] md:h-[600px]">
-        <img
+        <Image
+          width={900}
+          height={900}
           src={benefitsImg.src}
           alt="Imagen Beneficios"
           className="object-cover w-full h-full rounded-bl-3xl rounded-tl-3xl"
