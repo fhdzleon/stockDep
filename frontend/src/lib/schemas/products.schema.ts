@@ -9,11 +9,7 @@ export const ProductSchema = z
   .object({
     name: z.string().nonempty("Nombre requerido"),
     description: z.string().nonempty("Descripción requerida"),
-    categoryId: z.string().refine((val) => {
-      return validIds.includes(val)
-    }, {
-      message: "Categoria no valida"
-    }),
+    categoryId: z.string(),
     expirationDate: z
       .string()
       .optional()
