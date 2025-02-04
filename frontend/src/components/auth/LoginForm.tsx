@@ -30,6 +30,7 @@ const LoginForm = () => {
 
   const onSubmit = async (LoginData: LoginSchemaType) => {
     const response = await handleLogin(LoginData);
+    console.log("respuesta back", response);
 
     if (!response.wasValid) {
       return Swal.fire({
@@ -49,16 +50,7 @@ const LoginForm = () => {
       });
     }
 
-    localStorage.setItem("authToken", response.data.token);
-
-    const userData: BasicUserInfo = {
-      id: response.data.id,
-      firstname: response.data.firstname,
-      lastname: response.data.lastname,
-      email: response.data.email,
-      nameCompany: response.data.nameCompany,
-      businessArea: response.data.businessArea,
-    };
+    const userData: BasicUserInfo = response.data;
 
     Swal.fire({
       icon: "success",
@@ -68,6 +60,7 @@ const LoginForm = () => {
     });
 
     setData(userData);
+
     router.push("/dashboard");
   };
 

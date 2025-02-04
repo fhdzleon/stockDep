@@ -1,12 +1,6 @@
 import axios from "axios";
 import { getDatabaseConfig } from "./config";
-
-export const getAuthToken = () => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("authToken");
-  }
-  return null;
-};
+import { useAuthStore } from "@/store/auth.store";
 
 const { API_URL } = getDatabaseConfig;
 
@@ -19,20 +13,20 @@ export const API = axios.create({
 
 API.interceptors.request.use(
   (config) => {
-    const token = getAuthToken();
+    const token = useAuthStore.getState().token;
+    console.log("token enviado", token);
+
+    const requestUrl = config.url || "";
+
+    if (requestUrl.includes("/login") || requestUrl.includes("/register")) {
+      return config;
+    }
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => Promise.reject(error)
-);
-
-API.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
 );

@@ -1,10 +1,11 @@
 "use server";
-import { cookies } from "next/headers";
 
 import { API } from ".";
 import { useUserStore } from "@/store/user.store";
 import { ApiResponse, LoginProps, RegisterProps } from "./config";
 import { AxiosError } from "axios";
+import { useAuthStore } from "@/store/auth.store";
+import { BasicUserInfo } from "@/types/user.type";
 
 export interface LoginResponse {
   message: string;
@@ -26,48 +27,41 @@ export interface ErrorResponse {
   statusCode?: number;
 }
 
-export const handleLogin = async (
-  dataLogin: LoginProps
-): Promise<
-  ApiResponse<{
-    id: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    nameCompany: string;
-    businessArea: string;
-    user: User;
-    token: string;
-  }>
-> => {
+export const handleLogin = async ({
+  email,
+  password,
+}: LoginProps): Promise<ApiResponse<BasicUserInfo>> => {
   try {
-    const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
-      withCredentials: true,
+    const response = await API.post<{
+      token: string;
+      user: BasicUserInfo;
+    }>("/users/login", {
+      email,
+      password,
     });
+
+    const { token, user } = response.data;
+
+    console.log("esto es lo que guardamos en zustand", token);
+
+    useAuthStore.getState().setToken(token);
+    useUserStore.getState().setData(user);
 
     return {
       wasValid: true,
-      message: data.message,
-      data: {
-        user: data.user,
-        token: data.token,
-        id: data.user.id,
-        firstname: data.user.firstname,
-        lastname: data.user.lastname,
-        email: data.user.email,
-        nameCompany: data.user.nameCompany,
-        businessArea: data.user.businessArea,
-      },
+      message: "¡Inicio de sesión exitoso!",
+      data: { token, user },
     };
   } catch (error) {
     const axiosError = error as AxiosError<ErrorResponse>;
-    const errorMessage =
-      axiosError.response?.data?.message ||
-      axiosError.message ||
-      "Error en la autenticación";
+
+    console.error("Error al hacer la solicitud:", axiosError.response);
+
     return {
       wasValid: false,
-      message: errorMessage,
+      message:
+        axiosError.response?.data?.message ||
+        "Hubo un error al intentar iniciar sesión.",
     };
   }
 };
@@ -104,11 +98,13 @@ export const handleLogout = async (): Promise<ApiResponse> => {
   try {
     await API.post("/users/logout");
 
-    const cookieStore = cookies();
-    cookieStore.delete("authToken");
+    localStorage.removeItem("authToken");
 
-    const { delData } = useUserStore.getState();
-    delData();
+    document.cookie =
+      "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    useUserStore.getState().delData();
+    useAuthStore.getState().setToken(null);
 
     return {
       wasValid: true,
