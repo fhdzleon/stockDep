@@ -1,11 +1,12 @@
 "use server";
 import { ProductSchema } from "@/lib/schemas/products.schema";
 import { API } from ".";
+import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import {
   MutationResponse,
   ProductsResponse,
-  QueriesResponse
+  QueriesResponse,
 } from "@/types/product.types";
 import { AxiosError } from "axios";
 
@@ -40,11 +41,10 @@ export const getAllProducts = async (
   }
 };
 
-
 export const AllProductsEndpoint = async (): Promise<QueriesResponse> => {
   try {
     const { data } = await API.get("/products/all");
-    return { data }
+    return { data };
   } catch (error) {
     const axiosError = error as AxiosError<ProductErrorResponse>;
     return {
@@ -53,13 +53,12 @@ export const AllProductsEndpoint = async (): Promise<QueriesResponse> => {
       error: axiosError.response?.data?.message || axiosError.message,
     };
   }
-}
+};
 
 export const postProduct = async (
   product: ProductSchema
 ): Promise<MutationResponse> => {
-
-  const ed = product.expirationDate === '' ? null : product.expirationDate
+  const ed = product.expirationDate === "" ? null : product.expirationDate;
   const newProduct = {
     ...product,
     sku: randomUUID(),
@@ -95,8 +94,9 @@ export const putProduct = async (
 ): Promise<MutationResponse> => {
   const newData = {
     ...product,
-    expirationDate: product.expirationDate === '' ? null : product.expirationDate
-  }
+    expirationDate:
+      product.expirationDate === "" ? null : product.expirationDate,
+  };
   try {
     const { data } = await API.put(`/products/update/` + product.id, newData);
     return { success: true, data };
@@ -110,8 +110,14 @@ export const putProduct = async (
 };
 
 const fetchProductsByFilter = async (filter: string) => {
+  const token = cookies().get("authToken")?.value;
   try {
-    const totalResponse = await API.get(`/product/query?filter[${filter}]=all`);
+    const totalResponse = await API.get(
+      `/product/query?filter[${filter}]=all`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      }
+    );
 
     const total = totalResponse.data.totalItems || 0;
 
