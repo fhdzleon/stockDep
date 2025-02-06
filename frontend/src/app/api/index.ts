@@ -15,10 +15,15 @@ export const API = axios.create({
 
 API.interceptors.request.use(
   async (config) => {
-    const token = cookies().get("authToken");
-    if (token?.value) {
-      config.headers.Authorization = `Bearer ${token?.value}`;
+    const excludedRoutes = ["/login", "/register"];
+
+    if (!excludedRoutes.some((route) => config.url?.includes(route))) {
+      const token = cookies().get("authToken");
+      if (token?.value) {
+        config.headers.Authorization = `Bearer ${token.value}`;
+      }
     }
+
     return config;
   },
   (error) => Promise.reject(error)
