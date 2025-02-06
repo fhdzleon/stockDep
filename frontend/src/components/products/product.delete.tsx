@@ -1,7 +1,9 @@
 "use client";
 
 import { useProducts } from "@/hooks/useProduct";
+import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { Toast } from "../toast";
 
 interface DeleteProps {
   productID: string;
@@ -10,10 +12,9 @@ interface DeleteProps {
 }
 
 function ProductDelete({ productID, closeModal, productName }: DeleteProps) {
-  const { deleteError, deleteProduct, isDeleting } = useProducts();
+  const { deleteResponse, deleteProduct, isDeleting } = useProducts();
 
   const handleDelete = () => {
-
     Swal.fire({
       title: "Eliminar producto",
       html: `¿Estás seguro de eliminar el producto <b>${productName}</b>?`,
@@ -24,28 +25,26 @@ function ProductDelete({ productID, closeModal, productName }: DeleteProps) {
       confirmButtonColor: "var(--primary)",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          deleteProduct(productID);
-          closeModal();
-          Swal.fire({
-            title: "Eliminado",
-            text: "El producto ha sido eliminado",
-            icon: "success",
-            confirmButtonColor: "var(--primary)",
-          });
-        } catch (error: unknown) {
-          const errMessage = error instanceof Error ? error.message : "";
-          Swal.fire({
-            title: "Error",
-            text: deleteError?.message || errMessage || "Error al eliminar el producto",
-            icon: "error",
-            confirmButtonColor: "var(--primary)",
-          });
-        }
+        deleteProduct(productID);
       }
     });
-
   };
+
+  useEffect(() => {
+    if (!deleteResponse) return
+    if (deleteResponse.success) {
+      Toast.fire({
+        title: "Producto Eliminado!",
+        icon: "success",
+      });
+      closeModal()
+    } else {
+      Toast.fire({
+        title: deleteResponse.error || "Error al eliminar producto",
+        icon: "error",
+      });
+    }
+  }, [closeModal, deleteResponse])
 
   return (
     <>

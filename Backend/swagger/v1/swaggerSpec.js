@@ -41,6 +41,18 @@ import deleteProduct from './paths/products/deleteProduct.js';
 import restoreProduct from './paths/products/restoreProduct.js';
 import queryProducts from './paths/products/queryProducts.js';
 
+// Movement
+import createMovement from './paths/movement/createMovement.js';
+import getAllMovement from './paths/movement/getAllMovement.js';
+import getIdMovement from './paths/movement/getIdMovement.js';
+import updateMovement from './paths/movement/updateMovement.js';
+import deleteMovement from './paths/movement/deleteMovement.js';
+import getProductMovement from './paths/movement/getProductMovement.js';
+import getFilteredProducts from './paths/movement/getFilteredProducts.js';
+import MovementInput from './components/schemas/movement/MovementInput.js';
+import MovementCreate from './components/schemas/movement/MovementCreate.js';
+import MovementUpdate from './components/schemas/movement/MovementUpdate.js';
+
 const swaggerSpec = {
   openapi: '3.0.0',
   info,
@@ -71,6 +83,14 @@ const swaggerSpec = {
     '/products/delete/{id}': deleteProduct,
     '/products/restore/{id}': restoreProduct,
     '/product/query': queryProducts,
+    // Movement
+    '/movements': createMovement,
+    '/movement/query': getFilteredProducts,
+    '/movements/all': getAllMovement,
+    '/movements/{id}': getIdMovement,
+    '/movements/update/{id}': updateMovement,
+    '/movements/delete/{id}': deleteMovement,
+    '/movements/product/{productId}': getProductMovement,
   },
   components: {
     schemas: {
@@ -87,6 +107,10 @@ const swaggerSpec = {
       ProductInput,
       ProductOutput,
       ProductUpdate,
+      // Movement
+      MovementInput,
+      MovementCreate,
+      MovementUpdate,
     },
     securitySchemes: {
       BearerAuth: {

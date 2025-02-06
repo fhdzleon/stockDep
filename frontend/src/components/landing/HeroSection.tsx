@@ -1,5 +1,5 @@
 import Image from "next/image";
-import heroImg from "../../../public/assets/landing/hero-img.jpg";
+
 
 function HeroSection() {
   return (
@@ -10,7 +10,7 @@ function HeroSection() {
       <Image
         width={900}
         height={900}
-        src={heroImg.src}
+        src="/assets/landing/hero-img.jpg"
         alt="Imagen encabezado"
         className="object-cover w-full md:w-1/2 h-100"
       />

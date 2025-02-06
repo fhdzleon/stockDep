@@ -21,16 +21,18 @@ const InputGroup = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={clax}>
-        <label className="font-semibold">{label}</label>
+        <div className="label">
+          <span className="label-text">{label}</span>
+        </div>
         <input ref={ref} className={inputClass} {...props} />
-        <div className="h-6">
+        <div className="label h-6">
           <AnimatePresence>
             {errors?.message && (
               <motion.small
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-error"
+                className="text-error label-text-alt"
               >
                 {errors.message}
               </motion.small>

@@ -38,7 +38,7 @@ export function useCategories() {
 
   return {
     categoriesData: data?.data ?? [],
-    categoriesError: error,
+    categoriesError: data?.error || error,
     isFetchingCategorie: isFetching,
 
     //ejemplo retorno de informacion

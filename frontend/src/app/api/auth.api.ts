@@ -41,10 +41,15 @@ export const handleLogin = async (
   }>
 > => {
   try {
-    const { data } = await API.post<LoginResponse>("/users/login", dataLogin, {
-      withCredentials: true,
+    const { data } = await API.post<LoginResponse>("/users/login", dataLogin);
+    const token = data.token;
+    cookies().set("authToken", token, {
+      path: "/",
+      httpOnly: true,
+      secure: false,
+      maxAge: 60 * 60 * 24,
+      sameSite: false,
     });
-
     return {
       wasValid: true,
       message: data.message,
@@ -60,11 +65,9 @@ export const handleLogin = async (
       },
     };
   } catch (error) {
-    const axiosError = error as AxiosError<ErrorResponse>;
-    const errorMessage =
-      axiosError.response?.data?.message ||
-      axiosError.message ||
-      "Error en la autenticación";
+    const errorMessage = error
+      ? "Error al iniciar sesión"
+      : "Error al iniciar sesión";
     return {
       wasValid: false,
       message: errorMessage,

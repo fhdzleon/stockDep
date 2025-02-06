@@ -8,20 +8,16 @@ import ProductDelete from "./product.delete";
 import { MouseEvent } from "react";
 import { ProductoProps } from "@/types/product.types";
 import formatDate from "@/utils/formatDate.util";
+import { itemVarians } from "./product.list";
 
 const ProductItem: FC<ProductoProps> = ({
   data,
   isActive,
   openModal,
   closeModal,
+  custom
 }) => {
-  const statusClass = clsx(
-    "text-center grid grid-cols-9 gap-5 h-14 items-center p-2 cursor-pointer transition-colors",
-    {
-      "bg-blue-50": isActive,
-      "hover:bg-blue-50": !isActive,
-    }
-  );
+
   const caducidadText = !data.expirationDate
     ? "N/A"
     : formatDate(data.expirationDate!);
@@ -33,7 +29,7 @@ const ProductItem: FC<ProductoProps> = ({
         : "disponible";
   };
 
-  const stockClass = clsx("font-semibold rounded text-xs w-full h-fit p-1", {
+  const stockClass = clsx("font-semibold rounded-full h-fit px-2 flex items-center", {
     "text-red-800 bg-red-200": data.quantity === 0,
     "text-yellow-800 bg-yellow-200":
       data.quantity <= data.minimumQuantity && data.quantity > 0,
@@ -44,8 +40,8 @@ const ProductItem: FC<ProductoProps> = ({
     x: 0,
     y: 0,
   });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const handleOptions = (e: MouseEvent<HTMLDivElement>) => {
+  const containerRef = useRef<HTMLTableRowElement>(null);
+  const handleOptions = (e: MouseEvent<HTMLTableRowElement>) => {
     if (isActive) return;
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -55,27 +51,53 @@ const ProductItem: FC<ProductoProps> = ({
     openModal();
   };
 
+
+  const iconState = clsx({
+    "icon-[oui--token-null]": data.quantity === 0,
+    "icon-[mdi--arrow-bottom-left-thick]":
+      data.quantity <= data.minimumQuantity && data.quantity > 0,
+    "icon-[mdi--arrow-top-right-thick]": data.quantity > data.minimumQuantity,
+  })
+
+  const trClass = clsx("relative cursor-pointer transition-colors", {
+    "bg-blue-50": isActive,
+    "hover:bg-blue-50": !isActive,
+    "bg-rose-50 hover:bg-rose-100": data.quantity === 0
+  })
+
   return (
-    <div className="relative">
-      <div ref={containerRef} onClick={handleOptions} className={statusClass}>
-        <span
-          title={data.name}
-          className="col-span-2 text-start max-w-40 w-full truncate whitespace-nowrap line-clamp-2"
-        >
-          {data.name}
-        </span>
-        <span className="text-start truncate text-ellipsis col-span-2">
-          {data.Category.name}
-        </span>
-        <span>{caducidadText}</span>
-        <span>{data.costPrice}</span>
-        <span>{data.finalPrice}</span>
-        <span>{data.quantity}</span>
-        <span className={stockClass}>{stockText()}</span>
-      </div>
+    <motion.tr
+      className={trClass}
+      ref={containerRef}
+      onClick={(handleOptions)}
+      custom={custom}
+      variants={itemVarians}
+    >
+      <td data-label="Producto">{data.name}</td>
+      <td data-label="Categoria">{data.Category.name}</td>
+      <td data-label="Caducidad">
+        <div className="flex justify-end md:justify-start">
+          <div className="flex items-center gap-1  border-zinc-500 border rounded-full px-2">
+            <span className="icon-[lets-icons--date-range-light]" role="img" aria-hidden="true" />
+            <span>{caducidadText}</span>
+          </div>
+        </div>
+      </td>
+      <td data-label="P. Inicial">$ {data.costPrice}</td>
+      <td data-label="P. Venta">$ {data.finalPrice}</td>
+      <td data-label="Cantidad">{data.quantity}</td>
+      <td data-label="Estado">
+        <div className="flex justify-end md:justify-start">
+          <div className={stockClass}>
+            <span className={iconState} role="img" aria-hidden="true" />
+            <span>{stockText()}</span>
+          </div>
+        </div>
+      </td>
+
       <AnimatePresence>
         {isActive && (
-          <motion.div
+          <motion.td
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -89,7 +111,7 @@ const ProductItem: FC<ProductoProps> = ({
               top: axis.y,
               left: axis.x,
             }}
-            className="absolute top-0 rounded text-xs border w-28 border-primary z-10 bg-white shadow-sm"
+            className="absolute top-0 rounded text-xs border w-36 p-0 border-primary z-10 bg-white shadow-sm"
           >
             <ProductEdit closeModal={closeModal} product={data} />
             <ProductDelete
@@ -108,10 +130,10 @@ const ProductItem: FC<ProductoProps> = ({
                 aria-hidden="true"
               />
             </button>
-          </motion.div>
+          </motion.td>
         )}
       </AnimatePresence>
-    </div>
+    </motion.tr>
   );
 };
 

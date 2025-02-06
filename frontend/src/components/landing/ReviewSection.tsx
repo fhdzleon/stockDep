@@ -1,7 +1,4 @@
 import Image from "next/image";
-import testimonial1 from "../../../public/assets/landing/testimonial-1.jpg";
-import testimonial2 from "../../../public/assets/landing/testimonial-2.jpg";
-import testimonial3 from "../../../public/assets/landing/testimonial-3.jpg";
 
 function ReviewSection() {
   return (
@@ -17,7 +14,7 @@ function ReviewSection() {
             <Image
               width={900}
               height={900}
-              src={testimonial1.src}
+              src="/assets/landing/testimonial-1.jpg"
               alt="Imagen cliente"
               className="object-cover aspect-square w-[150px] rounded-full"
             />
@@ -41,7 +38,7 @@ function ReviewSection() {
             <Image
               width={900}
               height={900}
-              src={testimonial2.src}
+              src="/assets/landing/testimonial-2.jpg"
               alt="Imagen cliente"
               className="object-cover aspect-square w-[150px] rounded-full"
             />
@@ -65,7 +62,7 @@ function ReviewSection() {
             <Image
               width={900}
               height={900}
-              src={testimonial3.src}
+              src="/assets/landing/testimonial-3.jpg"
               alt="Imagen cliente"
               className="object-cover aspect-square w-[150px] rounded-full"
             />

@@ -8,7 +8,7 @@ import {
 
 const WidgetsCards = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col md:flex-row justify-center">
       <WidgetCard
         title="Productos Disponibles"
         bg="bg-success"

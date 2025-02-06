@@ -1,8 +1,4 @@
 import Image from "next/image";
-import feat1 from "../../../public/assets/landing/feat-1.svg";
-import feat2 from "../../../public/assets/landing/feat-2.svg";
-import feat3 from "../../../public/assets/landing/feat-3.svg";
-import feat4 from "../../../public/assets/landing/feat-4.svg";
 
 function FeaturesSection() {
   return (
@@ -17,7 +13,7 @@ function FeaturesSection() {
             <Image
               width={900}
               height={900}
-              src={feat1.src}
+              src="/assets/landing/feat-1.svg"
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
             />
@@ -54,7 +50,7 @@ function FeaturesSection() {
             <Image
               width={900}
               height={900}
-              src={feat2.src}
+              src="/assets/landing/feat-2.svg"
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
             />
@@ -66,7 +62,7 @@ function FeaturesSection() {
             <Image
               width={900}
               height={900}
-              src={feat3.src}
+              src="/assets/landing/feat-3.svg"
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
             />
@@ -102,7 +98,7 @@ function FeaturesSection() {
             <Image
               width={900}
               height={900}
-              src={feat4.src}
+              src="/assets/landing/feat-4.svg"
               alt="Imagen control stock"
               className="object-cover w-[150px] h-[150px] lg:w-[250px] lg:h-[250px]"
             />

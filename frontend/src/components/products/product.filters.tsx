@@ -1,6 +1,5 @@
 "use client";
 
-import ProductoModal from "./product.modal";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useFilterProduct } from "@/store/product.store";
 import { useDebounce } from "use-debounce";
@@ -101,7 +100,6 @@ function ProductFilter() {
             />
           </button>
         </div>
-        <ProductoModal />
       </div>
     </div>
   );

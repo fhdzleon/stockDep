@@ -9,7 +9,7 @@ export const createProduct = async (productData) => {
 
 // Obtener la lista de todos los productos
 export const getAllProducts = async (userId) => {
-  return await Product.findAll({where:{userId}});
+  return await Product.findAll({ where: { userId, activated: true } });
 };
 
 // Obtener los detalles de un producto por su ID
@@ -19,7 +19,7 @@ export const getProductById = async (id) => {
 
 // Actualizar la información de un producto existente
 export const updateProduct = async (userId, id, productData) => {
-  const product = await Product.findOne({where:{id, userId}});
+  const product = await Product.findOne({ where: { id, userId } });
   if (!product || product.userId !== userId) {
     throw new Error('Producto no encontrado o no tienes permiso para actualizarlo');
   }
@@ -28,7 +28,7 @@ export const updateProduct = async (userId, id, productData) => {
 
 // Eliminar un producto (soft delete)
 export const deleteProduct = async (userId, id) => {
-  const product = await Product.findOne({where:{id, userId}});
+  const product = await Product.findOne({ where: { id, userId } });
   if (!product) {
     throw new Error('Producto no encontrado o no tienes permiso para eliminarlo');
   }
@@ -37,7 +37,7 @@ export const deleteProduct = async (userId, id) => {
 
 // Restaurar un producto eliminado
 export const restoreProduct = async (userId, id) => {
-  const product = await Product.findOne({where: {id, userId}});
+  const product = await Product.findOne({ where: { id, userId } });
   if (!product) {
     throw new Error('Producto no encontrado o no tienes permiso para restaurarlo');
   }
@@ -45,9 +45,9 @@ export const restoreProduct = async (userId, id) => {
 };
 
 // Nuevo servicio para consultas de filtrado y ordenamiento
-export const queryProducts = async (userId, filter={}, sort={}, page = 1, limit = 10) => {
-  const whereClause = {userId, activated: true};
-  const orderClause = [];  
+export const queryProducts = async (userId, filter = {}, sort = {}, page = 1, limit = 10) => {
+  const whereClause = { userId, activated: true };
+  const orderClause = [];
 
   if (filter.minimumQuantity) {
     whereClause.quantity = {

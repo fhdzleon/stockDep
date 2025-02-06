@@ -1,114 +1,81 @@
-/* "use client";
+"use client";
 
+import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
-  RadialLinearScale,
+  type ChartData,
+  type ChartOptions,
 } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import { useEffect, useState } from "react";
+import { getTopSoldProducts } from "@/app/api/movements.api";
+import { TopSoldProduct } from "@/types/product.types";
 
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  RadialLinearScale,
-  ChartDataLabels
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const productos = [
-  { nombre: "1", unidades: 25 },
-  { nombre: "2", unidades: 40 },
-  { nombre: "3", unidades: 30 },
-  { nombre: "4", unidades: 15 },
-  { nombre: "5", unidades: 20 },
-  { nombre: "6", unidades: 35 },
-  { nombre: "7", unidades: 28 },
-  { nombre: "8", unidades: 22 },
-  { nombre: "9", unidades: 18 },
-  { nombre: "10", unidades: 33 },
-];
 
-interface ChartData {
-  labels: string[];
-  datasets: {
-    data: number[];
-    backgroundColor: string[];
-    borderColor: string[];
-    borderWidth: number;
-  }[];
-}
-
-export default function MostSellChart() {
-  const [data, setData] = useState<ChartData | null>(null);
+export default function MostSoldProductsChart() {
+  const [chartData, setChartData] = useState<ChartData<"doughnut"> | null>(
+    null
+  );
+  const [productList, setProductList] = useState<TopSoldProduct[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const labels = productos.map((producto) => producto.nombre);
-    const values = productos.map((producto) => producto.unidades);
+    const fetchData = async () => {
+      const { data, error } = await getTopSoldProducts();
 
-    setData({
-      labels: labels,
-      datasets: [
-        {
-          data: values,
-          backgroundColor: [
-            "#0066cc",
-            "#0077cc",
-            "#0088cc",
-            "#0099cc",
-            "#00aacc",
-            "#00bbcc",
-            "#00cccc",
-            "#00ddcc",
-            "#00eecc",
-            "#00ffcc",
+      if (error) {
+        setError(error);
+        return;
+      }
+      if (data) {
+        setProductList(data);
+        const labels = data.map(
+          (product: TopSoldProduct) => product.product_name
+        );
+        const values = data.map((product: TopSoldProduct) =>
+          Number.parseInt(product.total_quantity, 10)
+        );
+
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: [
+                "#0066cc",
+                "#0077cc",
+                "#0088cc",
+                "#0099cc",
+                "#00aacc",
+                "#00bbcc",
+                "#00cccc",
+                "#00ddcc",
+                "#00eecc",
+                "#00ffcc",
+              ].slice(0, data.length),
+              borderColor: Array(data.length).fill("#ffffff"),
+              borderWidth: 1,
+            },
           ],
-          borderColor: Array(10).fill("#ffffff"),
-          borderWidth: 1,
-        },
-      ],
-    });
+        });
+      }
+    };
+    fetchData();
   }, []);
 
-  const options = {
+  const options: ChartOptions<"doughnut"> = {
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       tooltip: {
-        enabled: false,
-      },
-      datalabels: {
-        color: "#333333",
-        formatter: (value: number, context: any) => {
-          return context.chart.data.labels[context.dataIndex];
-        },
-        font: {
-          size: 11,
-          weight: "bold" as const,
-        },
-        anchor: "end" as const,
-        align: "end" as const,
-        offset: 8,
-        textAlign: "center" as const,
-        listeners: {
-          enter: (context: any) => {
-            if (context.chart) {
-              context.chart.tooltip.setActiveElements(
-                [{ datasetIndex: context.datasetIndex, index: context.index }],
-                { x: context.element.x, y: context.element.y }
-              );
-              context.chart.update();
-            }
-          },
-          leave: (context: any) => {
-            if (context.chart) {
-              context.chart.tooltip.setActiveElements([], { x: 0, y: 0 });
-              context.chart.update();
-            }
+        callbacks: {
+          label: (context) => {
+            const label = context.label || "";
+            const value = context.formattedValue;
+            return `${label}: ${value}`;
           },
         },
       },
@@ -117,27 +84,70 @@ export default function MostSellChart() {
     radius: "90%",
   };
 
-  if (!data) return <p className="text-center text-gray-500">Cargando...</p>;
+  if (error) {
+    return (
+      <div className="alert alert-error">
+        Error al cargar los datos: {error}
+      </div>
+    );
+  }
+
+  if (!chartData) {
+    return <div className="alert alert-info mt-10 mx-5">Cargando datos...</div>;
+  }
 
   return (
-    <div className="w-80 h-80 mx-auto p-4 bg-white rounded-2xl">
-      <p className="text-lg font-semibold mb-4">Productos más vendidos</p>
-      <Doughnut data={data} options={options} />
+    <div className="card w-full  bg-base-100">
+      <div className="card-body">
+        <p className="text-primary font-bold my-3">Productos más vendidos</p>
+
+        {productList.length === 0 ? (
+          <p className="text-center text-gray-500 font-semibold">
+            No se han registrado ventas
+          </p>
+        ) : (
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="w-full md:w-1/2 mb-4 md:mb-0 flex items-center justify-center">
+              <div className="w-60 h-60">
+                <Doughnut data={chartData} options={options} />
+              </div>
+            </div>
+            <div className="w-full md:w-1/2">
+              <div className="grid grid-cols-2 gap-2 overflow-auto">
+                {[0, 1].map((columnIndex) => (
+                  <table key={columnIndex} className="table table-zebra w-full">
+                    <thead className="sticky top-0 bg-base-100 z-10">
+                      <tr>
+                        <th className="text-primary text-lg font-bold">
+                          Producto
+                        </th>
+                        <th className="text-primary text-lg font-bold">
+                          Vendidos
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array(5)
+                        .fill(null)
+                        .map((_, index) => {
+                          const product = productList[columnIndex * 5 + index];
+                          return (
+                            <tr key={index}>
+                              <td>{product ? product.product_name : ""}</td>
+                              <td className="text-center">
+                                {product ? product.total_quantity : ""}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
- */
-
-//!
-
-import React from "react";
-
-const MostSellChart = () => {
-  return (
-    <div>
-      <p>Grafico</p>
-    </div>
-  );
-};
-
-export default MostSellChart;

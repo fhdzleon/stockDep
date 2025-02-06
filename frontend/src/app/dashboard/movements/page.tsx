@@ -1,9 +1,9 @@
-import React from "react";
+import MovementList from "@/components/movement/MovementList";
 
 const Page = () => {
   return (
-    <div>
-      <p>Movements page</p>
+    <div className="max-w-4xl mx-auto mb-40">
+      <MovementList />
     </div>
   );
 };

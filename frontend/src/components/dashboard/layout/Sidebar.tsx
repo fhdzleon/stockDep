@@ -3,6 +3,8 @@
 import Image from "next/image";
 import SidebarItem from "@/ui/sidebar/SidebarItem";
 import { useLogout } from "@/hooks/useLogout";
+import useScreen from "@/hooks/useScreen";
+import clsx from "clsx";
 
 const Sidebar = () => {
   const { logout } = useLogout();
@@ -30,30 +32,44 @@ const Sidebar = () => {
     },
   ];
 
+  const { screen, isSm, isMd, isLg, isXl, is2Xl } = useScreen();
+  const sideClass = clsx("bg-primary z-40", {
+    "h-14 p-1 justify-center items-center w-full flex fixed bottom-0 z-10":
+      isSm || screen === undefined,
+    "flex flex-col w-20 px-4 text-white py-10 h-screen sty top-0 sticky": isMd,
+    "flex flex-col w-[250px] px-4 text-white py-10 h-screen top-0 sticky":
+      isLg || isXl || is2Xl,
+  });
+
+  const ulClass = clsx("relative", {
+    "grid grid-cols-5": isSm || screen === undefined,
+    "space-y-2": isLg || isMd || isXl || is2Xl,
+  });
+
   return (
-    <div className="flex flex-col w-[250px] px-4 text-white py-10 sticky top-0 h-screen bg-primary">
-      <div className="mb-8">
-        <Image
-          priority={true}
-          className="max-w-40 mx-auto w-auto "
-          src="/logoWhite.png"
-          alt="logo"
-          width={900}
-          height={900}
-        />
-      </div>
-
-      <nav className="flex-grow mt-4">
-        <ul className="space-y-2">
-          {pahts.map((item) => (
-            <li key={item.name}>
-              <SidebarItem text={item.name} icon={item.icon} path={item.path} />
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div onClick={logout} className="mt-auto">
+    <div className={sideClass}>
+      {!isSm && screen !== undefined && !isMd && (
+        <div className="mb-8 px-4">
+          <Image
+            src="/logoWhite.png"
+            alt="logo"
+            width={160}
+            height={40}
+            className="mx-auto"
+          />
+        </div>
+      )}
+      <ul className={ulClass}>
+        {pahts.map((item) => (
+          <SidebarItem
+            key={item.name}
+            text={item.name}
+            icon={item.icon}
+            path={item.path}
+          />
+        ))}
+      </ul>
+      <div onClick={logout} className="md:mt-auto hidden md:block ">
         <SidebarItem
           text="Cerrar sesión"
           icon="icon-[material-symbols--logout]"

@@ -8,6 +8,7 @@ import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoriesRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import movementRoutes from './routes/movementRoutes.js';
 
 // Configuracion
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 // Configurar CORS
 const allowedOrigin = [
   'http://localhost:3001', // React local
+  'http://localhost:3000', // React local
   'http://127.0.0.1:3001', // Alternativa local
   'http://localhost:4000', // Swagger UI u otro puerto
   process.env.CLIENT_URL, // URL en producción
@@ -24,13 +26,7 @@ const allowedOrigin = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigin.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: "*",
     methods: 'GET,POST,PUT,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
@@ -59,5 +55,6 @@ app.use(
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/', productRoutes);
+app.use('/api/v1/', movementRoutes);
 
 export default app;

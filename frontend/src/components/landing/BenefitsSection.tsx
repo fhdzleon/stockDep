@@ -1,6 +1,4 @@
 import Image from "next/image";
-import benefitsImg from "../../../public/assets/landing/benefits-img.jpg";
-import checkListPng from "../../../public/assets/landing/check-list.png";
 
 function BenefitsSection() {
 
@@ -25,7 +23,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -38,7 +36,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -51,7 +49,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -64,7 +62,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -76,7 +74,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -89,7 +87,7 @@ function BenefitsSection() {
             <Image
               width={900}
               height={900}
-              src={checkListPng.src}
+              src="/assets/landing/check-list.png"
               alt="Imagen Beneficios"
               className="object-cover w-[20px] h-[20px] mr-2"
             />
@@ -105,7 +103,7 @@ function BenefitsSection() {
         <Image
           width={900}
           height={900}
-          src={benefitsImg.src}
+          src="/assets/landing/benefits-img.jpg"
           alt="Imagen Beneficios"
           className="object-cover w-full h-full rounded-bl-3xl rounded-tl-3xl"
         />

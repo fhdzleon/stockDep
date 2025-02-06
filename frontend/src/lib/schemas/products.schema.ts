@@ -5,6 +5,7 @@ const { data } = useCategoriesStore.getState();
 
 const validIds = data.map((item) => item.id);
 
+
 export const ProductSchema = z
   .object({
     name: z.string().nonempty("Nombre requerido"),

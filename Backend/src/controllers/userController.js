@@ -51,23 +51,29 @@ export const loginUserController = async (req, res) => {
     // Autenticación del usuario
     const user = await loginUser(email, password);
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(404).json({ message: 'Invalid credentials' });
     }
     // Generación del token JWT
-    const token = await generateAuthToken(user.id);
+    const token = generateAuthToken(user.id);
+
     // Respuesta exitosa con token
-    res.status(200).json({
-      message: 'Login successful',
-      token,
-      user: {
-        id: user.id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        nameCompany: user.nameCompany,
-        businessArea: user.businessArea
-      },
-    });
+
+    return res
+      .status(200)
+      .json({
+        message: 'Login successful',
+        token,
+        user: {
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          nameCompany: user.nameCompany,
+          businessArea: user.businessArea,
+        },
+      });
+
+
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(422).json({
@@ -130,7 +136,7 @@ export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { firstname, lastname, email, password, birthdate, nameCompany,
-  businessArea } = req.body;
+      businessArea } = req.body;
 
     // Realizar la actualización
     const updated = await updateUserService(

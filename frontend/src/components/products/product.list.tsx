@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { useProducts } from "@/hooks/useProduct";
 import ProductItem from "./product.item";
-import { ProductItemSkeleton } from "./product.item.skeleton";
+import { TableListSkeleton } from "../TableListSkeleton";
 import { motion, Variants } from "framer-motion";
+import ProductAdd from "./product.add";
 
 const listVariant: Variants = {
   hidden: {
@@ -14,7 +15,7 @@ const listVariant: Variants = {
   },
 };
 
-const itemVarians: Variants = {
+export const itemVarians: Variants = {
   hidden: {
     opacity: 0,
     y: 20,
@@ -58,87 +59,77 @@ export function ProductList() {
     setHasMounted(true);
   }, []);
 
+
   return (
-    <div className="flex flex-col h-full justify-between gap-5 mb-5 mt-5 w-full">
-      {
-        <motion.ul
+    <section className="mt-10 flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <span className="text-2xl font-bold text-primary">Lista de productos</span>
+        <ProductAdd />
+      </div>
+
+      <div className="flex flex-col justify-between min-h-[700px]">
+        <motion.table
           variants={listVariant}
           initial="hidden"
           animate="visible"
-          className="max-w-6xl mx-auto h-full min-h-[600px] shadow-sm text-sm w-full"
-        >
-          <li className="text-center rounded-t bg-primary gap-5 text-white sticky top-0 grid grid-cols-9 p-2 transition-colors">
-            <span className="col-span-2 text-start">Producto</span>
-            <span className="text-start col-span-2">Categoria</span>
-            <span>Caducidad</span>
-            <span>P. Inicial</span>
-            <span>P. Venta</span>
-            <span>Cantidad</span>
-            <span>Estado</span>
-          </li>
-          {isFetching && currentPage.length === 0 && <ProductItemSkeleton />}
-          {error && (
-            <div className="alert">
-              <span
-                className="icon-[iconamoon--sign-times-duotone]"
-                role="img"
-                aria-hidden="true"
-              />
-              <span>{error.message}</span>
-            </div>
-          )}
-          {currentPage.length === 0 && !isFetching && (
-            <div className="alert mt-5">
-              <span
-                className="icon-[iconamoon--sign-times-duotone]"
-                role="img"
-                aria-hidden="true"
-              />
-              <span>No hay productos</span>
-            </div>
-          )}
-          {currentPage &&
-            currentPage.map((product, index) => (
-              <motion.li
-                viewport={{ once: true }}
-                custom={index}
-                variants={itemVarians}
-                key={product.id}
-              >
+          className="table table-fixed w-full">
+          <thead className="bg-primary text-white">
+            <tr>
+              <th className="w-1/4">Producto</th>
+              <th className="w-1/4">Categoria</th>
+              <th className="w-1/6">Caducidad</th>
+              <th className="w-1/12">P. Inicial</th>
+              <th className="w-1/12">P. Venta</th>
+              <th className="w-1/12">Cantidad</th>
+              <th className="w-1/6">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPage &&
+              currentPage.map((product, index) => (
                 <ProductItem
+                  key={product.id}
+                  custom={index}
                   data={product}
                   isActive={isVisible === product.id}
                   openModal={() => openModal(product.id)}
                   closeModal={closeModal}
                 />
-              </motion.li>
-            ))}
-        </motion.ul>
-      }
+              ))}
+          </tbody>
 
-      <div className="join self-center">
-        <button
-          onClick={() => handlePreviousPage()}
-          disabled={currentPageIndex === 0 || isFetching}
-          className="disabled:cursor-not-allowed join-item btn btn-primary btn-md"
-        >
-          <span className="icon-[ps--left]" role="img" aria-hidden="true" />
-          <span>Anterior</span>
-        </button>
-        <button
-          onClick={() => handleNextPage()}
-          disabled={
-            (!hasNextPage &&
-              currentPageIndex === (products?.pages?.length ?? 0) - 1) ||
-            isFetching
-          }
-          className="disabled:cursor-not-allowed join-item btn btn-primary btn-md"
-        >
-          <span>Siguiente</span>
-          <span className="icon-[ps--right]" role="img" aria-hidden="true" />
-        </button>
+        </motion.table>
+        {isFetching && !currentPage && <TableListSkeleton />}
+        {error && (
+          <div role="alert" className="alert alert-error">
+            <span className="icon-[simple-line-icons--close]" role="img" aria-hidden="true" />
+            <span>{error.message}</span>
+          </div>
+        )}
+        <div className="join self-center">
+          <button
+            onClick={() => handlePreviousPage()}
+            disabled={currentPageIndex === 0 || isFetching}
+            className="disabled:cursor-not-allowed join-item btn btn-primary btn-md"
+          >
+            <span className="icon-[ps--left]" role="img" aria-hidden="true" />
+            <span>Anterior</span>
+          </button>
+          <button
+            onClick={() => handleNextPage()}
+            disabled={
+              (!hasNextPage &&
+                currentPageIndex === (products?.pages?.length ?? 0) - 1) ||
+              isFetching
+            }
+            className="disabled:cursor-not-allowed join-item btn btn-primary btn-md"
+          >
+            <span>Siguiente</span>
+            <span className="icon-[ps--right]" role="img" aria-hidden="true" />
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
